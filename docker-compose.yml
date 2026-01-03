@@ -6,6 +6,9 @@ services:
       - PUID=1000
       - PGID=1000
       - ENCRYPTION_KEY
+      - CADDY_DOMAIN=${CADDY_DOMAIN}
+      - CADDY_TYPE=${CADDY_TYPE:-external}
+      - CADDY_PORT=${CADDY_PORT:-1411}
     healthcheck:
       test: "curl -f http://localhost:1411/healthz"
       interval: 1m30s
@@ -18,12 +21,10 @@ services:
     volumes:
       - app_data:/app/data
     networks:
-      proxy_apps:
+      - caddy
 
 volumes:
   app_data:
 
 networks:
-  proxy_apps:
-    name: proxy_apps
-    external: true
+  caddy:
